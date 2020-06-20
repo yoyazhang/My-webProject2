@@ -6,6 +6,9 @@ try {
     $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+    if(!isset($_GET['id'])){
+        echo '<script type="text/javascript">location.replace("../index.php")</script>';
+    }
     $sql = 'SELECT travelimage.ImageID, Title, Description,Content,PATH, traveluser.UserName,geocountries_regions.Country_RegionName,CityCode from travelimage NATURAL JOIN traveluser JOIN geocountries_regions ON geocountries_regions.ISO= travelimage.Country_RegionCodeISO WHERE travelimage.ImageId =:id';
     $sqlFavor = 'SELECT COUNT(*) AS kudos FROM travelimagefavor WHERE travelimagefavor.ImageID = :id';
     $id =  $_GET['id'];
@@ -67,6 +70,10 @@ function addTOFavor(){
         $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        if(!isset($_SESSION['UID'])){
+            echo '<script type="text/javascript">alert("您还未登录！请先登录")</script>';
+            return;
+        }
         //是否已经有了
         $ifHad = 'SELECT COUNT(*) AS hasany FROM travelimagefavor WHERE ImageID = :id and UID = :uid';
         $outcome = $pdo->prepare($ifHad);
@@ -121,7 +128,6 @@ function removeFromFavor(){
     <link href="../CSS/PicInformation.css" rel="stylesheet">
 </head>
 <body>
-
 <header>
     <div class="title">
         <h1><a name="header">Travel To Share</a></h1>
@@ -170,10 +176,10 @@ function removeFromFavor(){
 
     </div>
     <?php
-    if($_GET['status'] == 1){
+    if(isset($_GET['status']) && $_GET['status'] == 1){
         addTOFavor();
     }
-    elseif($_GET['status'] == 0){
+    elseif(isset($_GET['status']) && $_GET['status'] == 0){
         removeFromFavor();
     }
     ?>

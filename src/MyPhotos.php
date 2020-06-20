@@ -3,6 +3,9 @@ session_start();
 require_once('../config.php');
 include_once('outputNavLink.php');
 include_once('outputPage.php');
+if(!isset($_SESSION['UID'])){
+    echo '<script type="text/javascript">location.replace("../index.php")</script>';
+}
 function outputMyPics() {
     try {
         $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
@@ -21,7 +24,7 @@ function outputMyPics() {
 
         $row = $result->fetch();
         $amount = $row['amount'];
-        if( $amount ){
+        if($amount){
             if( $amount % $PageSize ){                                  //取总数据量除以每页数的余数
                 $totalPage = (int)($amount / $PageSize) + 1;           //如果有余数，则页数等于总数据量除以每页数的结果取整再加一
             }else{
@@ -65,7 +68,7 @@ function outputSinglePic($row) {
     echo '</div><div class="description">';
     echo $row['Description'];
     echo '</div>';
-    echo '<input type="button" name="delete" value="DELETE"  class="deletePic" alt="'.$row['ImageID'].'">';
+    echo '<input type="button" name="delete" value="DELETE" class="deletePic" alt="'.$row['ImageID'].'">';
     echo '<input type="button" name="modify" value="MODIFY" class="modifyPic" alt="'.$row['ImageID'].'">';
     echo '</figcaption></figure></div></li>';
 }

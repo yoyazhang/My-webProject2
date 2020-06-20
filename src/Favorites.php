@@ -3,6 +3,9 @@ session_start();
 require_once('../config.php');
 include_once('outputNavLink.php');
 include_once('outputPage.php');
+if(!isset($_SESSION['UID'])){
+    echo '<script type="text/javascript">location.replace("../index.php")</script>';
+}
 function outputFavorPics() {
     try {
         $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);

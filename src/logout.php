@@ -14,7 +14,7 @@ try {
 }catch (PDOException $e) {
     die( $e->getMessage() );
 }
-unset($_SESSION['Username']);
+unset($_SESSION);
 header("Location: login.php");
 ?>
 

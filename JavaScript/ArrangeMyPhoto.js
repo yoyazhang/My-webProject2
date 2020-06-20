@@ -1,4 +1,7 @@
 $(".deletePic").click(function () {
+    if(!window.confirm("您确定要删除照片吗？")){
+        return;
+    }
     let lastURL = window.location.href;
     let id = $(this).attr("alt");
     let xmlhttp = new XMLHttpRequest();

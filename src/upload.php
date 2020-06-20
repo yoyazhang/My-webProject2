@@ -3,7 +3,10 @@ session_start();
 require_once('../config.php');
 include_once('outputNavLink.php');
 include_once('outputCouReg.php');
-if($_GET['ImageID']){
+if(!isset($_SESSION['UID'])){
+    echo '<script type="text/javascript">location.replace("../index.php")</script>';
+}
+if(isset($_GET['ImageID'])){
     try {
         $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -18,7 +21,7 @@ if($_GET['ImageID']){
     }
 }
 function outputButton(){
-    if($_GET['ImageID']){
+    if(isset($_GET['ImageID'])){
         echo '<input type="submit" value="MODIFY" name="UploadSubmit">';
     }
     else echo '<input type="submit" value="SUBMIT" name="UploadSubmit">';
@@ -51,7 +54,7 @@ function outputButton(){
 </header>
 <main>
     <?php
-    if($_GET['ImageID']){
+    if(isset($_GET['ImageID'])){
         echo '<form id="formMod" action="modify.php" method="post" role="form" enctype="multipart/form-data">';
     }else{
         echo '<form id="formUP" action="add.php" method="post" role="form" enctype="multipart/form-data">';
@@ -59,14 +62,14 @@ function outputButton(){
     ?>
         <fieldset>
             <?php
-            if($_GET['ImageID']){
+            if(isset($_GET['ImageID'])){
                 echo '<input type="hidden" name="ImageID" value="'.$_GET['ImageID'].'">';
             }
             ?>
             <legend>Upload New Picture</legend>
             <div class="uploadPic">
                 <?php
-                if($_GET['ImageID']){
+                if(isset($_GET['ImageID'])){
                     echo '<img id="PicFromUser" src="../images/normal/medium/'.$row['PATH'].'"/>';
                 }else{
                     echo '<img id="PicFromUser" src=""/><p id="placeholder">No Picture Uploaded</p>';
@@ -76,7 +79,7 @@ function outputButton(){
             <div class="wrap">
                 <span>UPLOAD</span>
                 <?php
-                if($_GET['ImageID']){
+                if(isset($_GET['ImageID'])){
                     echo '<input type="file" name="photoUpload" id="file" required>';
                 } else{
                    echo '<input type="file" name="photoUpload" id="file" required>';
@@ -85,7 +88,7 @@ function outputButton(){
             </div>
             <label id="uploadPicTitle">Picture Title:
                 <?php
-                if($_GET['ImageID']){
+                if(isset($_GET['ImageID'])){
                     echo '<input type="text" name="UploadPhotoTitle" value="'.$row['Title'].'" required>';
                 }else{
                     echo '<input type="text" name="UploadPhotoTitle" required>';
@@ -95,7 +98,7 @@ function outputButton(){
             <label id ="uploadPicContent">Content:
                 <select name="Content" required>
                     <?php
-                    if($_GET['ImageID']){
+                    if(isset($_GET['ImageID'])){
                         $contentARR = array('default','scenery','city','people','animal','building','wonder','other');
                         for($i = 1;$i < 8;$i++){
                             if($row['Content'] == $contentARR[$i]){
@@ -119,7 +122,7 @@ function outputButton(){
             </label>
             <label id="uploadDep">Description:
                 <?php
-                if($_GET['ImageID']){
+                if(isset($_GET['ImageID'])){
                     echo '<textarea name="UploadPhotoDescription">'.$row['Description'].'</textarea>';
                 }else{
                     echo '<textarea name="UploadPhotoDescription"></textarea>';
@@ -128,7 +131,7 @@ function outputButton(){
             </label>
             <label id="uploadCountry">Country:
                 <?php
-                    if($_GET['ImageID']){
+                    if(isset($_GET['ImageID'])){
                         $mode = $row['CityCode'];
                         echo '<select name="Countries" onchange="setCity(this,this.form.Cities)" id="Countries" required class="a'.$row['CityCode'].'">';
                         outputCouRegMod($row);

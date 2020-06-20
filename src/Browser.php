@@ -6,17 +6,18 @@ include_once('outputPageBrowser.php');
 include_once('outputCouReg.php');
 
 function outputBrowserPics() {
-    $query = $_GET['query'];
-    $CityCode = $_GET['Cities'];
-    $ISO = $_GET['CouRegs'];
-    $content = $_GET['Content'];
-
-    if($query==null && $CityCode == 'default'&&$ISO == 'default'&&$content=='default'){
-        return;
-    }elseif($query == null){
-        $mode = 'multiple';
-    }else{
+    if(isset($_GET['query'])){
+        $query = $_GET['query'];
         $mode = 'single';
+    }
+    else{
+        $CityCode = $_GET['Cities'];
+        $ISO = $_GET['CouRegs'];
+        $content = $_GET['Content'];
+        $mode = 'multiple';
+        if($CityCode == 'default'&&$ISO == 'default'&&$content=='default'){
+            return;
+        }
     }
 
     try {
@@ -53,7 +54,6 @@ function outputBrowserPics() {
         $numRes->execute();
         $row = $numRes->fetch();
         $amount = $row['amount'];
-        $currentPageAmount = $amount - ($page-1)*9;
 
         $PageSize = 9;
         $rowSize = 3;
@@ -71,25 +71,22 @@ function outputBrowserPics() {
             echo '<script type="text/javascript">alert("Oops! Nothing is found,change some keywords and try again");</script>';
             return;
         }
+        $currentPageAmount =($page != $totalPage)?9:($amount - ($page-1)*9);
         if($page == $totalPage){
             if( $currentPageAmount % $rowSize ){
                 $totalRow = (int)($currentPageAmount / $rowSize) + 1;
-                $hasMore = true;
-                $moreNum = $currentPageAmount % $rowSize;
             }else{
                 $totalRow = $currentPageAmount / $rowSize;
-                $hasMore = false;
             }
+            $moreNum = $currentPageAmount % $rowSize;
         }
         else{
             if( $currentPageAmount % $rowSize ){
                 $totalRow = (int)(9 / $rowSize) + 1;
-                $hasMore = true;
-                $moreNum = 9 % $rowSize;
             }else{
                 $totalRow = 9 / $rowSize;
-                $hasMore = false;
             }
+            $moreNum = 9 % $rowSize;
         }
         $startNum = 9*($page-1);
         if($mode == 'single'){
@@ -116,7 +113,7 @@ function outputBrowserPics() {
 
         $result->execute();
 
-        outputTable($totalRow,$moreNum,$hasMore,$result);
+        outputTable($totalRow,$moreNum,$result);
         if($mode == 'single'){
             outputPageLink($page,$totalPage,$_GET['way'],$query);
         }else{
@@ -149,7 +146,7 @@ function getSQL($originalSQL,$content,$CityCode,$ISO){
     }
     return $originalSQL;
 }
-function outputTable($totalRow,$moreNum,$hasMore,$result){
+function outputTable($totalRow,$moreNum,$result){
     echo '<section class="results">';
     echo '<table id="BrowserPic">';
     for($i = 0;$i < $totalRow-1; $i++){
@@ -160,7 +157,7 @@ function outputTable($totalRow,$moreNum,$hasMore,$result){
         }
         echo '</tr>';
     }
-    if($hasMore){
+    if($moreNum != 0){
         echo '<tr>';
         for($j = 0;$j < $moreNum;$j++){
             $row = $result->fetch();
@@ -318,7 +315,7 @@ function constructFilterLink($way,$query,$label){
                 </fieldset>
             </form>
         </section>
-        <?php if($_GET['query'] != null || $_GET['Cities']!= null) outputBrowserPics(); ?>
+        <?php if(isset($_GET['query']) || isset($_GET['Cities'])) outputBrowserPics(); ?>
     </div>
 </main>
 <footer>

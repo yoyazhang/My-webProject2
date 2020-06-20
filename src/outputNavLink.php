@@ -2,7 +2,7 @@
 require_once('../config.php');
 
 function LoginOrOut($nowPage){
-    if($_SESSION['Username']){
+    if(isset($_SESSION['Username'])){
         echo '<li id="theDoor"><h2 id="myZone"><img class="icon" src="../images/icons/个人中心.png">MyZone</h2>';
         echo '<ul id="navPersonal">';
         if($nowPage == 'upload'){

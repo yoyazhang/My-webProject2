@@ -70,7 +70,7 @@ function constructPicLink($id, $label) {
 }
 
 function LoginOrOut(){
-    if($_SESSION['Username']){
+    if(isset($_SESSION['Username'])){
         echo '<li id="theDoor"><h2 id="myZone"><img class="icon" src="images/icons/个人中心.png">MyZone</h2>';
         echo '<ul id="navPersonal">';
         echo '<li><a href="src/upload.php?id='.$_SESSION['UID'].'"><img class="icon" src="images/icons/上传-未选中.png">Upload</a></li>';
@@ -159,7 +159,7 @@ function LoginOrOut(){
     <section class="homePics">
         <table>
             <?php
-            if($_GET['mode']==1){
+            if(isset($_GET['mode']) && $_GET['mode']==1){
                 outputRandomPics();
             }
             else{

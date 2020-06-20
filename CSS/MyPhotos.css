@@ -61,6 +61,7 @@ figcaption div.description{
     -webkit-box-orient: vertical;
     text-indent: 2em;
     font-size: 1.6vw;
+
 }
 input[type="button"]{
     color: whitesmoke;
