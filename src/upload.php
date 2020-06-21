@@ -80,7 +80,7 @@ function outputButton(){
                 <span>UPLOAD</span>
                 <?php
                 if(isset($_GET['ImageID'])){
-                    echo '<input type="file" name="photoUpload" id="file" required>';
+                    echo '<input type="file" name="photoUpload" id="file">';
                 } else{
                    echo '<input type="file" name="photoUpload" id="file" required>';
                 }
