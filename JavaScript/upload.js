@@ -2,7 +2,6 @@ let file = document.getElementById('file');
 let image = document.getElementById("PicFromUser");
 file.onchange = function() {
     let fileData = this.files[0];//获取到一个FileList对象中的第一个文件( File 对象),是我们上传的文件
-    alert(fileData);
     let pettern = /^image/;
 
     console.info(fileData.type)
